@@ -2,7 +2,7 @@ defmodule GameTest do
   use ExUnit.Case
   doctest Hangman
 
-  alias Hangman.Game
+  alias Hangman.Impl.Game
 
   test "new_game/0" do
     game = Game.new_game()

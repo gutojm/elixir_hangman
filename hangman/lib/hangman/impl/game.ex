@@ -1,18 +1,25 @@
-defmodule Hangman.Game do
+defmodule Hangman.Impl.Game do
+  @type t :: %__MODULE__{
+    turns_left: integer,
+    game_state: Hangman.state,
+    letters: list(String.t),
+    used: MapSet.t(String.t)
+  }
+
   defstruct turns_left: 7,
             game_state: :initializing,
             letters: [],
             used: MapSet.new()
 
   def new_game(word) do
-    %Hangman.Game{letters: word |> String.codepoints()}
+    %__MODULE__{letters: word |> String.codepoints()}
   end
 
   def new_game do
     new_game(Dictionary.random_word())
   end
 
-  def make_move(game = %Hangman.Game{game_state: state}, _guess) when state in [:won, :lost] do
+  def make_move(game = %__MODULE__{game_state: state}, _guess) when state in [:won, :lost] do
     game
   end
 
