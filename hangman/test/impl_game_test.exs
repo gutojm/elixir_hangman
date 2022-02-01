@@ -53,6 +53,15 @@ defmodule HangmanImplGameTest do
       assert game.game_state == :already_used
     end
 
+    test "record used letters" do
+      game = Game.new_game()
+
+      {game, _} = Game.make_move(game, "x")
+      {game, _} = Game.make_move(game, "y")
+      {game, _} = Game.make_move(game, "x")
+      assert MapSet.equal?(game.used, MapSet.new(["x", "y"]))
+    end
+
     test "good guess" do
       game = Game.new_game("wibble")
 

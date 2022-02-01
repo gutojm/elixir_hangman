@@ -25,12 +25,13 @@ defmodule Hangman.Impl.Game do
 
   @spec make_move(t, String.t()) :: {t, Type.tally()}
   def make_move(game = %__MODULE__{game_state: state}, _guess) when state in [:won, :lost] do
-    {game, tally(game)}
+    game
+    |> return_with_tally()
   end
 
   def make_move(game, guess) do
-    game = accept_move(game, guess, MapSet.member?(game.used, guess))
-    {game, tally(game)}
+    accept_move(game, guess, MapSet.member?(game.used, guess))
+    |> return_with_tally()
   end
 
   def tally(game) do
@@ -42,12 +43,16 @@ defmodule Hangman.Impl.Game do
     }
   end
 
+  defp return_with_tally(game) do
+    {game, tally(game)}
+  end
+
   defp accept_move(game, _guess, _already_guessed = true) do
-    Map.put(game, :game_state, :already_used)
+    %{game | game_state: :already_used}
   end
 
   defp accept_move(game, guess, _already_guessed) do
-    Map.put(game, :used, MapSet.put(game.used, guess))
+    %{game | used: MapSet.put(game.used, guess)}
     |> score_guess(Enum.member?(game.letters, guess))
   end
 
