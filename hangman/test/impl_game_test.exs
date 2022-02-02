@@ -106,7 +106,7 @@ defmodule HangmanImplGameTest do
         {"f", :bad_guess, 3},
         {"g", :bad_guess, 2},
         {"h", :bad_guess, 1},
-        {"j", :lost, 1}
+        {"j", :lost, 0}
       ]
       |> Enum.reduce(game, fn {guess, state, turns_left}, game ->
         {game, _} = Game.make_move(game, guess)

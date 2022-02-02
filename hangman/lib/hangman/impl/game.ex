@@ -15,7 +15,9 @@ defmodule Hangman.Impl.Game do
 
   @spec new_game() :: t
   def new_game do
-    new_game(Dictionary.random_word())
+    Dictionary.start()
+    |> Dictionary.random_word()
+    |> new_game()
   end
 
   @spec new_game(String.t()) :: t
@@ -62,11 +64,11 @@ defmodule Hangman.Impl.Game do
       |> MapSet.subset?(game.used)
       |> maybe_won
 
-    Map.put(game, :game_state, new_state)
+    %{game | game_state: new_state}
   end
 
   defp score_guess(game = %{turns_left: 1}, _not_good_guess) do
-    Map.put(game, :game_state, :lost)
+    %{game | game_state: :lost, turns_left: 0}
   end
 
   defp score_guess(game = %{turns_left: turns_left}, _not_good_guess) do
@@ -79,10 +81,10 @@ defmodule Hangman.Impl.Game do
   defp reveal_guessed(letters, used) do
     letters
     |> Enum.map(fn letter ->
-      reveal_letter(letter, MapSet.member?(used, letter))
+      maybe_reveal(letter, MapSet.member?(used, letter))
     end)
   end
 
-  defp reveal_letter(letter, true), do: letter
-  defp reveal_letter(_letter, _), do: "_"
+  defp maybe_reveal(letter, true), do: letter
+  defp maybe_reveal(_letter, _), do: "_"
 end

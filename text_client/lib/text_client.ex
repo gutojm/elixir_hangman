@@ -3,5 +3,6 @@ defmodule TextClient do
   Documentation for `TextClient`.
   """
 
-  defdelegate start(), to: TextClient.Interact
+  @spec start() :: :ok
+  defdelegate start(), to: TextClient.Impl.Player
 end

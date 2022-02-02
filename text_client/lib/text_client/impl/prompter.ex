@@ -1,5 +1,5 @@
-defmodule TextClient.Prompter do
-  alias TextClient.State
+defmodule TextClient.Impl.Prompter do
+  alias TextClient.Impl.State
 
   def accept_move(game = %State{}) do
     IO.gets("Your guess: ")
@@ -22,6 +22,7 @@ defmodule TextClient.Prompter do
     cond do
       input =~ ~r/\A[a-z]\z/ ->
         Map.put(game, :guess, input)
+
       true ->
         IO.puts("enter a single lower-case letter")
         accept_move(game)
